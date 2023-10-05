@@ -10,31 +10,18 @@ class Element
 private:
 	int Data;
 	Element* Next, * Prev;
-	static int count;
 public:
-	int get_data()const
-	{
-		return Data;
-	}
-	Element* get_next()const
-	{
-		return Next;
-	}
 	Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr) :Data(Data), Next(Next), Prev(Prev)
 	{
-		count++;
 		cout << "EConstructor:\t" << this << endl;
 	}
 	~Element()
 	{
-		count--;
 		cout << "EDestructor:\t" << this << endl;
 	}
 	friend class Iterator;
 	friend class List;
 };
-
-int Element::count = 0;
 
 class Iterator
 {
@@ -97,10 +84,6 @@ private:
 	Element* Head, * Tail;
 	unsigned int size;
 public:
-	Element* get_head()const
-	{
-		return Head;
-	}
 	const Iterator cbegin()const
 	{
 		return Head;
@@ -180,7 +163,7 @@ public:
 		for (; i < position; i++) Erased = Erased->Next;
 		Element* Previous = Erased->Prev;
 		Element* After = Erased->Next;
-		// Check if deleting
+																// Check if deleting
 		if (Previous && size != 1) Previous->Next = After;		// not Head
 		if (After && size != 1) After->Prev = Previous;			// not Tail
 		if (position == 1) Head = After;						// first
@@ -217,24 +200,9 @@ public:
 	}
 };
 
-List operator+(const List& lvalue, const List& rvalue)
-{
-	List result = lvalue;
-	Element* Temp = rvalue.get_head();
-	while (Temp)
-	{
-		result.push_back(Temp->get_data());
-		Temp = Temp->get_next();
-	}
-	return result;
-}
-
 void main()
 {
 	setlocale(LC_ALL, "");
-	List list1 = { 3, 5, 8, 13 };
-	List list2 = { 22, 33, 88 };
-	List list3; 
-	list3 = list1 + list2;
-	list3.print();
+	List list{ 3,5,8,13,21 };
+	list.print();
 }
