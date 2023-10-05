@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -144,7 +145,9 @@ public:
 	{
 		if (this == &other) return *this;
 		while (Head)pop_front();
-		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)push_back(Temp->Data);
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+			push_front(Temp->Data);
+		reverse();
 		cout << "LCopyAssignment:\t" << this << "<-" << &other << endl;
 		return *this;
 	}
@@ -249,9 +252,20 @@ public:
 		cout << "Общее количество элементов списка: " << Element::count << endl;
 		//К статическим полям принято обращаться через имя класса и оператор разрешения видимости
 	}
+	void reverse()
+	{
+		ForwardList reverse;
+		while (Head)
+		{
+			reverse.push_front(Head->Data);
+			this->pop_front();
+		}
+		this->Head = reverse.Head;
+		reverse.Head = nullptr;
+	}
 };
 
-ForwardList operator+(const ForwardList& lvalue,const ForwardList& rvalue)
+ForwardList operator+(const ForwardList& lvalue, const ForwardList& rvalue)
 {
 	ForwardList result = lvalue;
 	for (Iterator it = rvalue.begin(); it != rvalue.end(); it++)
@@ -262,6 +276,8 @@ ForwardList operator+(const ForwardList& lvalue,const ForwardList& rvalue)
 //#define BASE_CHECK
 //#define ERASE_CHECK
 //#define RANGE_BASED_FORWARD_LIST_CHECK
+//#define OPERATOR_PLUS_CHECK
+#define FORWARD_LIST_PERFORMANCE_TEST
 
 void main()
 {
@@ -296,6 +312,7 @@ void main()
 	cout << endl;
 #endif // RANGE_BASED_FORWARD_LIST_CHECK
 
+#ifdef OPERATOR_PLUS_CHECK
 	ForwardList list1 = { 3, 5, 8, 13, 21 };
 	for (int i : list1) cout << i << tab; cout << endl;
 
@@ -305,7 +322,30 @@ void main()
 	ForwardList list3;
 	list3 = list1 + list2;
 	for (int i : list3)cout << i << tab; cout << endl;
+#endif // OPERATOR_PLUS_CHECK
 
-	list1.print();
-	list2.print();
+#ifdef FORWARD_LIST_PERFORMANCE_TEST
+	int n;
+	cout << "Введите размер списка: "; cin >> n;
+	ForwardList list;
+	clock_t start = clock();
+	for (int i = 0; i < n; i++)
+	{
+		int value = rand() % 100;
+		//cout << value << tab;
+		list.push_front(value);
+	}
+	cout << endl;
+	//for (int i : list)cout << i << tab; cout << endl;
+	clock_t end = clock();
+	cout << "Data loaded for " << double(end - start) / CLOCKS_PER_SEC << endl;
+	cout << "Copying list..." << endl;
+	start = clock();
+	ForwardList list2 = list;
+	//for (int i : list2)cout << i << tab; cout << endl;
+	end = clock();
+	cout << "List copied for " << double(end - start) / CLOCKS_PER_SEC << endl;
+#endif // FORWARD_LIST_PERFORMANCE_TEST
+
+
 }
