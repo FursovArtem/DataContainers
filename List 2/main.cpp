@@ -11,7 +11,7 @@ private:
 	int Data;
 	Element* Next, * Prev;
 public:
-	Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr) :Data(Data), Next(Next), Prev(Prev)
+	Element(int Data, Element* Next = nullptr, Element* Prev = nullptr) :Data(Data), Next(Next), Prev(Prev)
 	{
 		cout << "EConstructor:\t" << this << endl;
 	}
