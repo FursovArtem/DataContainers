@@ -510,4 +510,6 @@ void main()
 
 	List<std::string> s_list = { "No", "money", "no", "honey" };
 	for (std::string i : s_list)cout << i << tab; cout << endl;
+
+
 }
