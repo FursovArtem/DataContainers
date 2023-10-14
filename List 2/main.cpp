@@ -19,83 +19,20 @@ public:
 	{
 		cout << "EDestructor:\t" << this << endl;
 	}
-	friend class Iterator;
 	friend class List;
-};
-
-class Iterator
-{
-private:
-	Element* Temp;
-public:
-	Iterator(Element* Temp = nullptr) :Temp(Temp)
-	{
-		cout << "ItConstructor:\t" << this << endl;
-	}
-	Iterator(const Iterator& other)
-	{
-		this->Temp = other.Temp;
-		cout << "ItCopyConstructor:\t" << this << endl;
-	}
-	~Iterator()
-	{
-		cout << "ItDestructor:\t" << this << endl;
-	}
-
-	Iterator& operator++()
-	{
-		Temp = Temp->Next;
-		return *this;
-	}
-	Iterator& operator--()
-	{
-		Temp = Temp->Prev;
-		return *this;
-	}
-	Iterator operator++(int)
-	{
-		Iterator old = *this;
-		Temp = Temp->Next;
-		return old;
-	}
-	Iterator operator--(int)
-	{
-		Iterator old = *this;
-		Temp = Temp->Prev;
-		return old;
-	}
-	bool operator==(const Iterator& rvalue)const
-	{
-		return this->Temp == rvalue.Temp;
-	}
-	bool operator!=(const Iterator& rvalue)const
-	{
-		return this->Temp != rvalue.Temp;
-	}
-	int operator*()
-	{
-		return Temp->Data;
-	}
+	friend class Iterator;
 };
 
 class List
 {
 private:
-	Element* Head, * Tail;
-	unsigned int size;
+	Element *Head, * Tail;
+	size_t size;
 public:
-	const Iterator cbegin()const
-	{
-		return Head;
-	}
-	const Iterator cend()const
-	{
-		return Tail;
-	}
 	List()
 	{
-		this->Head = this->Tail = nullptr;
-		this->size = 0;
+		Head = Tail = nullptr;
+		size = 0;
 		cout << "LConstructor:\t" << this << endl;
 	}
 	List(const List& other) :List()
@@ -192,6 +129,14 @@ public:
 		else Tail = New;
 		size++;
 	}
+	void pop_front()
+	{
+		if(size) del(1);
+	}
+	void pop_back()
+	{
+		if (size) del(size);
+	}
 
 	void print()const
 	{
@@ -200,9 +145,63 @@ public:
 	}
 };
 
+class Iterator
+{
+private:
+	Element* Temp;
+public:
+	Iterator(Element* Temp = nullptr) :Temp(Temp)
+	{
+		cout << "ItConstructor:\t" << this << endl;
+	}
+	Iterator(const Iterator& other)
+	{
+		this->Temp = other.Temp;
+		cout << "ItCopyConstructor:\t" << this << endl;
+	}
+	~Iterator()
+	{
+		cout << "ItDestructor:\t" << this << endl;
+	}
+
+	Iterator& operator++()
+	{
+		Temp = Temp->Next;
+		return *this;
+	}
+	Iterator& operator--()
+	{
+		Temp = Temp->Prev;
+		return *this;
+	}
+	Iterator operator++(int)
+	{
+		Iterator old = *this;
+		Temp = Temp->Next;
+		return old;
+	}
+	Iterator operator--(int)
+	{
+		Iterator old = *this;
+		Temp = Temp->Prev;
+		return old;
+	}
+	bool operator==(const Iterator& rvalue)const
+	{
+		return this->Temp == rvalue.Temp;
+	}
+	bool operator!=(const Iterator& rvalue)const
+	{
+		return this->Temp != rvalue.Temp;
+	}
+	int operator*()
+	{
+		return Temp->Data;
+	}
+};
+
 void main()
 {
 	setlocale(LC_ALL, "");
-	List list{ 3,5,8,13,21 };
-	list.print();
+
 }
