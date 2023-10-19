@@ -196,7 +196,6 @@ private:
 			cout << Root->Data << tab;
 			return;
 		}
-	
 		depth_print(Root->pLeft, depth - 1, width);
 		cout.width(width); cout << "";
 		depth_print(Root->pRight, depth - 1, width);
