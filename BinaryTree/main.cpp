@@ -96,6 +96,10 @@ public:
 	{
 		tree_print(0, this->depth() * 8);
 	}
+	void balance()
+	{
+		balance(Root);
+	}
 	void print()const
 	{
 		print(Root);
@@ -189,25 +193,58 @@ private:
 	}
 	void depth_print(Element* Root, int depth, int width = 8)const
 	{
-		if (Root == nullptr)return;
+		if (Root == nullptr)
+		{
+			cout.width(width * 2); cout << "";
+			return;
+		}
 		if (depth == 0)
 		{
 			cout.width(width);
-			cout << Root->Data << tab;
+			cout << Root->Data;
 			return;
 		}
 		depth_print(Root->pLeft, depth - 1, width);
-		cout.width(width); cout << "";
+		cout.width(width); cout << " ";
 		depth_print(Root->pRight, depth - 1, width);
 	}
 	void tree_print(int depth, int width)const
 	{
-		if (depth == this->depth())return;
+		if (depth == this->depth())
+		{
+			return;
+		}
 		depth_print(this->Root, depth, width);
 		cout << endl;
 		cout << endl;
 		cout << endl;
+		cout << endl;
+		cout << endl;
 		tree_print(depth + 1, width / 2);
+	}
+	void balance(Element* Root)
+	{
+		if (Root == nullptr) return;
+		if (abs(count(Root->pLeft) - count(Root->pRight) < 2))return;
+
+		if (count(Root->pLeft) > count(Root->pRight))
+		{
+			if (Root->pRight == nullptr) Root->pRight = new Element(Root->Data);
+			else insert(Root->Data, Root->pRight);
+			Root->Data = maxValue(Root->pLeft);
+			erase(maxValue(Root->pLeft), Root->pLeft);
+		}
+		else
+		{
+			if (Root->pLeft == nullptr) Root->pLeft = new Element(Root->Data);
+			else insert(Root->Data, Root->pLeft);
+			Root->Data = minValue(Root->pRight);
+			erase(minValue(Root->pRight), Root->pRight);
+		}
+		balance(Root->pLeft);
+		balance(Root->pRight);
+		balance(Root);
+
 	}
 	void print(Element* Root)const
 	{
@@ -256,7 +293,7 @@ void measure(const char msg[], T(Tree::* function)()const, const Tree& tree)
 //#define PERFORMANCE_CHECK_1
 //#define UNIQUE_TREE_CHECK
 //#define ERASE_CHECK
-#define DEPTH_CHECK
+//#define DEPTH_CHECK
 
 void main()
 {
@@ -347,6 +384,11 @@ void main()
 												98
 	};
 	//cout << "Глубина дерева: " << tree.depth() << endl;
+	tree.tree_print();
 #endif // DEPTH_CHECK
+
+	Tree tree = { 89, 55, 34, 21, 13, 8, 5, 3 };
+	tree.tree_print();
+	tree.balance();
 	tree.tree_print();
 }
